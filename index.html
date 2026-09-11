@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>印记 - 私密网页高级托管引擎</title>
+
+  <!-- 🌟 仓库已上传的网页图标标准调用[cite: 3] -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+  <style>
+    /* 🌟 暗金深色主题变量（默认） */
+    :root {
+      --primary: #f59e0b;
+      --primary-hover: #d97706;
+      --bg-main: #020617;
+      --bg-gradient: radial-gradient(circle at top right, rgba(245,158,11,0.1), transparent 40%), radial-gradient(circle at bottom left, rgba(217,119,6,0.1), transparent 40%), #020617;
+      --card-bg: rgba(15, 23, 42, 0.88);
+      --card-border: rgba(245, 158, 11, 0.4);
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --panel-border-dashed: rgba(255, 255, 255, 0.1);
+      --input-bg: rgba(0, 0, 0, 0.3);
+      --input-border: rgba(255, 255, 255, 0.1);
+      --input-color: #ffffff;
+      --btn-bg: rgba(255, 255, 255, 0.05);
+      --btn-border: rgba(255, 255, 255, 0.1);
+      --btn-color: #ffffff;
+      --dashboard-bg: #1e293b;
+      --dashboard-border: #334155;
+      --dashboard-color: #cbd5e1;
+      --page-card-bg: rgba(0, 0, 0, 0.3);
+      --page-card-title: #fde68a;
+      --action-btn-color: #cbd5e1;
+      --action-btn-border: rgba(255, 255, 255, 0.1);
+      --action-btn-bg: transparent;
+      --logo-inner-bg: #090e1a;
+      --preview-bg: rgba(0, 0, 0, 0.4);
+      --shadow-color: rgba(0, 0, 0, 0.5);
+    }
+
+    /* 🌟 浅太阳暖金渐变主题 */
+    body.theme-light {
+      --primary: #f59e0b;
+      --primary-hover: #d97706;
+      --bg-main: #fffbeb;
+      --bg-gradient: radial-gradient(circle at top right, rgba(245,158,11,0.18), transparent 45%), radial-gradient(circle at bottom left, rgba(217,119,6,0.12), transparent 45%), linear-gradient(135deg, #fffbeb 0%, #fef3c7 50%, #fde68a 100%);
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --card-border: rgba(245, 158, 11, 0.35);
+      --text-main: #1f2937;
+      --text-sub: #6b7280;
+      --panel-border-dashed: rgba(245, 158, 11, 0.25);
+      --input-bg: #ffffff;
+      --input-border: rgba(0, 0, 0, 0.12);
+      --input-color: #1f2937;
+      --btn-bg: #ffffff;
+      --btn-border: rgba(0, 0, 0, 0.1);
+      --btn-color: #1f2937;
+      --dashboard-bg: rgba(255, 255, 255, 0.92);
+      --dashboard-border: rgba(245, 158, 11, 0.38);
+      --dashboard-color: #4b5563;
+      --page-card-bg: #ffffff;
+      --page-card-title: #b45309;
+      --action-btn-color: #4b5563;
+      --action-btn-border: rgba(0, 0, 0, 0.08);
+      --action-btn-bg: #f8fafc;
+      --logo-inner-bg: #ffffff;
+      --preview-bg: rgba(241, 245, 249, 0.7);
+      --shadow-color: rgba(245, 158, 11, 0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(245, 158, 11, 0.3); border-radius: 4px; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-main);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
+      min-height: 100vh;
+      color: var(--text-main);
+      padding: 20px 16px 50px;
+      overflow-x: hidden;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .container { max-width: 1440px; margin: 0 auto; position: relative; z-index: 1; }
+
+    /* 🌟 高奢黑金旋转边框「印记」Logo */
+    .header {
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+      gap: 16px; padding-bottom: 16px; margin-bottom: 18px; border-bottom: 1px dashed rgba(245, 158, 11, 0.35);
+    }
+    .logo-area { display: flex; align-items: center; gap: 16px; }
+
+    .logo-box {
+      position: relative;
+      padding: 2px;
+      border-radius: 14px;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 18px rgba(245, 158, 11, 0.25);
+    }
+
+    .logo-box::before {
+      content: "";
+      position: absolute;
+      width: 250%;
+      height: 250%;
+      background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        #d97706 20%,
+        #fde68a 45%,
+        #f59e0b 70%,
+        transparent 100%
+      );
+      animation: rotateBorder 4s linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes rotateBorder {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .logo-inner {
+      position: relative;
+      z-index: 2;
+      background: var(--logo-inner-bg);
+      padding: 6px 20px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease;
+    }
+
+    .logo-text {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 4px;
+      background: linear-gradient(135deg, #fde68a 0%, #f59e0b 50%, #d97706 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .header-desc { font-size: 13px; color: var(--text-sub); transition: color 0.3s ease; }
+
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 800; cursor: pointer; border: 1px solid var(--btn-border); background: var(--btn-bg); color: var(--btn-color); transition: all 0.2s; outline: none; text-decoration: none; }
+    .btn:hover { border-color: var(--primary); background: rgba(245, 158, 11, 0.12); }
+    .btn-primary { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; border: none; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25); }
+    .btn-primary:hover { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* 🌟 顶栏控制组与双主题切换按钮 */
+    .header-ctrl-group {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      max-width: 100%;
+    }
+
+    .status-dashboard {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--dashboard-color);
+      background: var(--dashboard-bg);
+      padding: 5px 6px 5px 18px;
+      border-radius: 99px;
+      border: 1px solid var(--dashboard-border);
+      box-shadow: 0 4px 15px var(--shadow-color);
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
+
+    .status-dashboard .status-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .highlight { color: #f59e0b; font-weight: bold; }
+
+    .btn-renew {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      border: none;
+      color: #fff;
+      padding: 7px 18px;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
+      white-space: nowrap;
+    }
+    .btn-renew:hover {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.45);
+      transform: translateY(-1px);
+    }
+
+    /* 主题模式切换小按钮 */
+    .btn-theme-toggle {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--dashboard-border);
+      background: var(--dashboard-bg);
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 2px 8px var(--shadow-color);
+      flex-shrink: 0;
+      outline: none;
+    }
+    .btn-theme-toggle:hover {
+      transform: rotate(20deg) scale(1.08);
+      border-color: var(--primary);
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+    }
+
+    /* 📱 移动端与苹果手机自适应对称排版 */
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+      }
+      .logo-area {
+        justify-content: center;
+        width: 100%;
+      }
+      .header-ctrl-group {
+        width: 100%;
+        justify-content: center;
+        gap: 8px;
+      }
+      .status-dashboard {
+        width: calc(100% - 46px);
+        max-width: 360px;
+        margin: 0;
+        border-radius: 18px;
+        padding: 12px 14px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        align-items: center;
+        justify-items: center;
+      }
+      .status-dashboard .status-item {
+        font-size: 12px;
+        gap: 4px;
+        justify-content: center;
+      }
+      .status-dashboard .btn-renew {
+        grid-column: 1 / -1;
+        width: 100%;
+        padding: 10px 0;
+        font-size: 13px;
+        letter-spacing: 1px;
+        border-radius: 12px;
+        box-shadow: 0 3px 12px rgba(245, 158, 11, 0.35);
+      }
+      .btn-theme-toggle {
+        width: 38px;
+        height: 38px;
+        align-self: center;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .status-dashboard .status-item { font-size: 11px; }
+    }
+
+    .workspace-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 18px; margin-bottom: 24px; }
+    @media (max-width: 992px) { .workspace-grid { grid-template-columns: 1fr; } }
+
+    .panel-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 18px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px var(--shadow-color);
+      display: flex;
+      flex-direction: column;
+      height: 680px;
+      transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed var(--panel-border-dashed); }
+    .panel-title { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+
+    .config-grid { display: grid; grid-template-columns: 1.4fr 1.2fr 1fr; gap: 8px; margin-bottom: 10px; }
+    @media (max-width: 640px) { .config-grid { grid-template-columns: 1fr; } }
+    .input-field {
+      padding: 10px 12px;
+      border: 1px solid var(--input-border);
+      border-radius: 10px;
+      font-size: 13px;
+      background: var(--input-bg);
+      color: var(--input-color);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .input-field:focus { border-color: var(--primary); }
+
+    .code-editor {
+      flex: 1;
+      width: 100%;
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      padding: 14px;
+      font-family: monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      background: #020617;
+      color: #38bdf8;
+      outline: none;
+      resize: none;
+    }
+
+    .preview-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--preview-bg);
+      border-radius: 14px;
+      border: 1px solid var(--panel-border-dashed);
+      overflow: hidden;
+      transition: background 0.3s ease;
+    }
+    .preview-iframe { width: 100%; height: 100%; border: none; background: #fff; transition: width 0.25s ease; }
+    .preview-iframe.mobile-mode { width: 375px; height: 600px; border-radius: 24px; border: 6px solid #1f2937; }
+
+    /* 🌟 印记托管仓列表卡片 */
+    .assets-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 30px var(--shadow-color);
+      transition: all 0.3s ease;
+    }
+    .page-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-top: 16px;}
+    .page-card {
+      background: var(--page-card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: 0.2s;
+    }
+    .page-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+    .page-card-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: var(--page-card-title); }
+    .page-card-slug { font-size: 12px; color: var(--text-sub); font-family: monospace; }
+    .page-card-meta { font-size: 12px; color: var(--text-sub); margin-top: 12px; display: flex; justify-content: space-between; }
+    .page-card-actions { display: flex; gap: 6px; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--panel-border-dashed); }
+    .action-btn {
+      flex: 1;
+      padding: 6px 0;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--action-btn-border);
+      background: var(--action-btn-bg);
+      cursor: pointer;
+      color: var(--action-btn-color);
+      transition: 0.2s;
+      text-align: center;
+      text-decoration: none;
+    }
+    .action-btn:hover { background: rgba(245, 158, 11, 0.15); color: var(--primary-hover); border-color: var(--primary); }
+
+    .toast-msg { position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-20px); background: rgba(15, 23, 42, 0.95); color: #fff; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 800; border: 1px solid var(--primary); box-shadow: 0 8px 30px rgba(0,0,0,0.6); z-index: 10000; opacity: 0; pointer-events: none; transition: 0.3s; }
+    .toast-msg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast-msg.error { border-color: #ef4444; color: #fecaca; }
+
+    /* 🌟 全屏权限锁定遮罩层 */
+    .lock-overlay { position: fixed; inset: 0; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(20px); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 1; transition: opacity 0.4s; }
+    .lock-overlay.hidden { opacity: 0; pointer-events: none; }
+    .lock-card { background: #1e293b; border: 1.5px solid #f59e0b; padding: 40px; border-radius: 24px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+    .lock-title { font-size: 22px; color: #f8fafc; margin-bottom: 12px; font-weight: 900; letter-spacing: 1px;}
+    .lock-desc { font-size: 14px; color: #94a3b8; margin-bottom: 24px; line-height: 1.6;}
+    .key-input { width: 100%; padding: 14px; background: #0f172a; border: 1px solid #334155; border-radius: 12px; color: #fde68a; font-family: monospace; font-size: 15px; text-align: center; outline: none; margin-bottom: 16px; }
+    .key-input:focus { border-color: #f59e0b; }
+    .lock-actions { display: flex; gap: 12px; }
+    
+    #wxModal { display: none; margin-top: 20px; animation: slideDown 0.3s; }
+    #wxModal img { width: 100%; max-width: 220px; border-radius: 12px; border: 4px solid #fff; }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* 🌟 续费弹窗 */
+    .renew-modal-overlay {
+      position: fixed; inset: 0; background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(12px);
+      z-index: 10001; display: none; align-items: center; justify-content: center; animation: fadeIn 0.25s ease;
+    }
+    .renew-modal-card {
+      position: relative; background: #1e293b; border: 1.5px solid var(--primary);
+      padding: 30px 24px; border-radius: 24px; text-align: center; width: 90%; max-width: 390px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.8); animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .renew-close-btn {
+      position: absolute; top: 14px; right: 16px; background: none; border: none;
+      color: #94a3b8; font-size: 20px; cursor: pointer; transition: 0.2s;
+    }
+    .renew-close-btn:hover { color: #fff; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scaleUp { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  </style>
+</head>
+<body>
+
+  <div id="toastMsg" class="toast-msg">✓ 操作成功</div>
+
+  <!-- 🌟 顶栏联系续费与卡密累加弹窗 -->
+  <div id="renewModal" class="renew-modal-overlay" onclick="closeRenewModal(event)">
+    <div class="renew-modal-card" onclick="event.stopPropagation()">
+      <button class="renew-close-btn" onclick="closeRenewModal()">✕</button>
+      <div style="font-size: 34px; margin-bottom: 6px;">💎</div>
+      <h3 style="font-size: 19px; color: #fde68a; margin-bottom: 4px; font-weight: 800;">时空授权续费</h3>
+      <p style="font-size: 13px; color: #94a3b8; margin-bottom: 16px;">扫码联系管理员获取新卡密，或在下方直接充值续费</p>
+      
+      <div style="background: #fff; padding: 8px; border-radius: 12px; display: inline-block; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
+        <img src="/微信二维码.jpg" alt="微信二维码" onerror="this.src='微信二维码.jpg'" style="width: 180px; height: 180px; object-fit: cover; display: block; border-radius: 6px;">
+      </div>
+
+      <div style="margin-top: 18px; text-align: left;">
+        <input type="text" id="renewKeyInput" class="key-input" placeholder="输入续费卡密: YJ-XXX-XXX..." style="margin-bottom: 10px;" autocomplete="off">
+        <button class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px;" onclick="submitRenewKey()">⚡ 立即累加使用时长</button>
+      </div>
+      <div style="margin-top: 10px; font-size: 12px; color: #64748b;">支持在原有剩余天数上叠加延长时长</div>
+    </div>
+  </div>
+
+  <!-- 🌟 系统权限与到期锁定遮罩 -->
+  <div class="lock-overlay" id="lockOverlay">
+    <div class="lock-card">
+      <div style="font-size: 48px; margin-bottom: 16px;">🔐</div>
+      <h2 class="lock-title">印记时空未激活或已到期</h2>
+      <p class="lock-desc">核心编辑权限已被锁定。<br>请输入授权卡密激活系统，或联系客服获取最新卡密。</p>
+      <input type="text" id="licenseKeyInput" class="key-input" placeholder="输入卡密: YJ-XXX-XXX..." autocomplete="off">
+      <div class="lock-actions">
+        <button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="activateLicense()">🔑 立即验证激活</button>
+        <button class="btn" style="flex: 1; justify-content: center;" onclick="toggleWxModal()">💬 微信咨询获取</button>
+      </div>
+      <div id="wxModal">
+        <img src="/微信二维码.jpg" alt="扫码加微信获取卡密" onerror="this.src='微信二维码.jpg'">
+        <p style="font-size:12px; color:#cbd5e1; margin-top:8px;">长按或扫码添加客服获取卡密</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <header class="header">
+      <div class="logo-area">
+        <!-- 🌟 旋转动态黑金光刃框 + 清爽无粒子高奢内嵌 -->
+        <div class="logo-box">
+          <div class="logo-inner">
+            <div class="logo-text">印记</div>
+          </div>
+        </div>
+        <div>
+          <div class="header-desc" style="font-weight: bold; font-size: 14px; margin-top:0;">高阶私密单页托管引擎</div>
+        </div>
+      </div>
+
+      <!-- 🌟 顶栏控制组：胶囊仪表盘 + 明暗主题切换小按钮 -->
+      <div class="header-ctrl-group">
+        <div class="status-dashboard">
+          <span class="status-item" title="系统授权期限">⏳ 到期时间: <span class="highlight" id="expireDateTxt">检测中...</span></span>
+          <span class="status-item" title="最大容量限制 21MB">💾 云端容量: <span class="highlight" id="storageTxt">0 MB / 21 MB</span></span>
+          <button class="btn-renew" onclick="openRenewModal()">⚡ 续费</button>
+        </div>
+
+        <!-- 🌓 深浅主题快速切换按钮 -->
+        <button id="themeToggleBtn" class="btn-theme-toggle" onclick="toggleTheme()" title="切换深色/浅太阳主题">☀️</button>
+      </div>
+    </header>
+
+    <div class="workspace-grid">
+      <!-- 左栏：源码与配置 -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <span class="panel-title">📄 网页源码与配置</span>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn" onclick="document.getElementById('fileUpload').click()">📁 导入文件</button>
+            <button class="btn" onclick="clearEditor()">🗑️ 清空</button>
+            <input type="file" id="fileUpload" accept=".html,.htm" style="display:none;" onchange="handleFileImport(event)" />
+          </div>
+        </div>
+
+        <div class="config-grid">
+          <input type="text" id="pageTitleInput" class="input-field" placeholder="页面标题（留空自动抓取）" />
+          <input type="text" id="pageSlugInput" class="input-field" placeholder="短链后缀（如: love，留空随机）" />
+          <input type="password" id="pagePasswordInput" class="input-field" placeholder="访问密码（可选）" />
+        </div>
+
+        <textarea id="htmlCodeEditor" class="code-editor" placeholder="在此粘贴完整的 HTML 代码，或直接拖拽 .html 文件至此处..."></textarea>
+
+        <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+          <span id="codeSizeTip" style="font-size: 12px; color: var(--text-sub);">当前代码：0 B</span>
+          <button id="publishBtn" class="btn btn-primary" style="padding: 10px 24px; font-size: 14px;" onclick="publishPage()">🚀 立即发布并生成链接</button>
+        </div>
+      </div>
+
+      <!-- 右栏：沙盒实时调试 -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <span class="panel-title">👁️ 沙盒实时预览</span>
+          <div style="display: flex; gap: 6px;">
+            <button id="viewPcBtn" class="btn btn-primary" onclick="setPreviewMode('pc')">💻 电脑模式</button>
+            <button id="viewMobileBtn" class="btn" onclick="setPreviewMode('mobile')">📱 手机模式</button>
+            <button class="btn" onclick="refreshPreview()">🔄 刷新视图</button>
+          </div>
+        </div>
+
+        <div class="preview-container">
+          <iframe id="previewIframe" class="preview-iframe" sandbox="allow-scripts allow-modals allow-same-origin allow-forms"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🌟 底部资产库：已重命名为「印记托管仓」 -->
+    <div class="assets-section">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 16px; font-weight: 700;">📦 印记托管仓 (<span id="pageCount">0</span>)</span>
+        <button class="btn" onclick="loadPageList()">🔄 刷新列表</button>
+      </div>
+      <div class="page-grid" id="pageGrid"></div>
+    </div>
+  </div>
+
+  <script>
+    const AUTH_STORAGE_KEY = "YINJI_LICENSE_KEY";
+    const THEME_STORAGE_KEY = "YINJI_THEME_MODE";
+    let licenseKey = localStorage.getItem(AUTH_STORAGE_KEY) || "";
+
+    const titleInput = document.getElementById("pageTitleInput");
+    const slugInput = document.getElementById("pageSlugInput");
+    const pwdInput = document.getElementById("pagePasswordInput");
+    const codeEditor = document.getElementById("htmlCodeEditor");
+    const previewIframe = document.getElementById("previewIframe");
+    const sizeTip = document.getElementById("codeSizeTip");
+    const publishBtn = document.getElementById("publishBtn");
+    let previewTimer = null;
+
+    /* ==========================================================
+       📖 官方系统默认部署使用手册 HTML 完整源码 (已更新为 21MB)
+    ========================================================== */
+    const DEFAULT_MANUAL_HTML = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>印记 · 私密网页高级托管引擎使用手册</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23020617'/><rect x='6' y='6' width='88' height='88' rx='20' fill='none' stroke='%23f59e0b' stroke-width='6'/><text x='50' y='69' font-size='56' font-weight='900' font-family='sans-serif' text-anchor='middle' fill='%23f59e0b'>印</text></svg>">
+  <style>
+    :root { --bg-main: #020617; --card-bg: rgba(15, 23, 42, 0.85); --card-border: rgba(245, 158, 11, 0.35); --gold: #f59e0b; --gold-light: #fde68a; --gold-glow: rgba(245, 158, 11, 0.25); --text-main: #f8fafc; --text-sub: #94a3b8; --accent-cyan: #38bdf8; --accent-red: #ef4444; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", sans-serif; background: var(--bg-main); background-image: radial-gradient(circle at 15% 10%, rgba(245, 158, 11, 0.12) 0%, transparent 45%), radial-gradient(circle at 85% 90%, rgba(217, 119, 6, 0.1) 0%, transparent 45%), linear-gradient(180deg, #020617 0%, #080d1a 100%); background-attachment: fixed; color: var(--text-main); line-height: 1.8; padding: calc(30px + env(safe-area-inset-top)) 16px calc(60px + env(safe-area-inset-bottom)); }
+    .wrapper { max-width: 960px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 36px; padding-bottom: 24px; border-bottom: 1px dashed rgba(245, 158, 11, 0.3); }
+    .logo-container { display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .logo-box { position: relative; background: #0f172a; border: 2px solid var(--gold); padding: 8px 24px; border-radius: 14px; box-shadow: 0 4px 20px var(--gold-glow), inset 0 2px 6px rgba(255, 255, 255, 0.1); overflow: hidden; }
+    .logo-particles { position: absolute; inset: 0; opacity: 0.7; animation: particleDrift 14s linear infinite; background-image: radial-gradient(circle at 20% 30%, #fde68a 1px, transparent 1px), radial-gradient(circle at 80% 40%, #f59e0b 1.5px, transparent 1.5px), radial-gradient(circle at 40% 70%, #d97706 1px, transparent 1px); background-size: 24px 24px; }
+    @keyframes particleDrift { from { background-position: 0 0; } to { background-position: 24px 24px; } }
+    .logo-text { font-size: 30px; font-weight: 900; letter-spacing: 6px; position: relative; z-index: 2; background: linear-gradient(135deg, #fde68a 0%, #f59e0b 50%, #d97706 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .header-title { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+    .header-desc { font-size: 14px; color: var(--text-sub); }
+    .toc-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 35px; background: rgba(15, 23, 42, 0.6); padding: 14px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(10px); }
+    .toc-btn { color: var(--text-sub); text-decoration: none; font-size: 13px; font-weight: 700; padding: 6px 14px; border-radius: 20px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.06); transition: all 0.2s; }
+    .toc-btn:hover { color: #fff; border-color: var(--gold); background: rgba(245, 158, 11, 0.15); transform: translateY(-1px); }
+    .module-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 30px; margin-bottom: 28px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); backdrop-filter: blur(12px); scroll-margin-top: 30px; }
+    .module-card:hover { border-color: rgba(245, 158, 11, 0.6); }
+    .module-header { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+    .module-badge { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; font-size: 13px; font-weight: 900; padding: 3px 10px; border-radius: 8px; }
+    .module-title { font-size: 20px; font-weight: 800; color: #fff; }
+    .mark-circle { display: inline-block; border: 1.5px solid var(--gold); color: var(--gold-light); background: rgba(245, 158, 11, 0.12); padding: 1px 8px; border-radius: 6px; font-weight: 800; box-shadow: 0 0 10px rgba(245, 158, 11, 0.2); }
+    .mark-cyan { border-color: var(--accent-cyan); color: #bae6fd; background: rgba(56, 189, 248, 0.12); box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
+    .mark-red { border-color: var(--accent-red); color: #fecaca; background: rgba(239, 68, 68, 0.15); box-shadow: 0 0 10px rgba(239, 68, 68, 0.2); }
+    .txt-bold { font-weight: 800; color: #fff; }
+    code { background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(245, 158, 11, 0.25); color: var(--gold-light); padding: 2px 7px; border-radius: 6px; font-family: ui-monospace, monospace; font-size: 13px; }
+    .content-list { list-style: none; padding: 0; margin: 0; }
+    .content-list > li { position: relative; padding-left: 28px; margin-bottom: 18px; font-size: 15px; color: #cbd5e1; line-height: 1.8; }
+    .content-list > li::before { content: "✦"; position: absolute; left: 2px; top: 0; color: var(--gold); font-size: 15px; line-height: 1.8; }
+    .sub-list { list-style: none; margin: 10px 0 6px 4px; padding: 4px 0 4px 18px; border-left: 2px solid rgba(245, 158, 11, 0.3); }
+    .sub-list > li { position: relative; padding-left: 18px; margin-bottom: 10px; font-size: 14.5px; color: #94a3b8; line-height: 1.7; }
+    .sub-list > li:last-child { margin-bottom: 0; }
+    .sub-list > li::before { content: "•"; position: absolute; left: 2px; top: -1px; color: var(--accent-cyan); font-size: 18px; line-height: 1.7; }
+    .alert-box { margin: 18px 0; padding: 16px 20px; border-radius: 14px; font-size: 14.5px; line-height: 1.7; }
+    .alert-gold { background: rgba(245, 158, 11, 0.08); border-left: 4px solid var(--gold); color: #fef08a; }
+    .alert-red { background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--accent-red); color: #fca5a5; }
+    .table-responsive { width: 100%; overflow-x: auto; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); margin: 16px 0; }
+    .custom-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; min-width: 600px; }
+    .custom-table th { background: #0f172a; color: var(--gold); font-weight: 800; padding: 14px 18px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+    .custom-table td { padding: 14px 18px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); color: #cbd5e1; vertical-align: middle; }
+    .custom-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
+    .custom-table tr:last-child td { border-bottom: none; }
+    .faq-container { display: flex; flex-direction: column; gap: 14px; }
+    .faq-card { background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; padding: 18px 22px; transition: all 0.2s; }
+    .faq-card:hover { border-color: rgba(245, 158, 11, 0.3); }
+    .faq-q { font-size: 15px; font-weight: 800; color: #fde68a; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+    .faq-a { font-size: 14px; color: #94a3b8; line-height: 1.7; padding-left: 24px; }
+    .footer { text-align: center; font-size: 13px; color: #64748b; margin-top: 40px; padding-top: 20px; border-top: 1px dashed rgba(255, 255, 255, 0.1); }
+    @media (max-width: 768px) { .module-card { padding: 20px 16px; } .module-title { font-size: 18px; } .toc-bar { gap: 6px; padding: 10px; } .toc-btn { font-size: 12px; padding: 4px 10px; } .content-list > li { padding-left: 24px; } }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <header class="header">
+      <div class="logo-container"><div class="logo-box"><div class="logo-particles"></div><div class="logo-text">印记</div></div></div>
+      <h1 class="header-title">私密网页高级托管引擎 · 用户手册</h1>
+      <p class="header-desc">零配置 HTML 单页极速部署、双端沙盒实时预览、访问密码加密及独立短链分发系统</p>
+    </header>
+    <nav class="toc-bar">
+      <a href="#sec-1" class="toc-btn">1. 初始化与激活</a>
+      <a href="#sec-2" class="toc-btn">2. 源码编辑发布</a>
+      <a href="#sec-3" class="toc-btn">3. 双端沙盒调试</a>
+      <a href="#sec-4" class="toc-btn">4. 印记托管仓</a>
+      <a href="#sec-5" class="toc-btn">5. 配额与保护机制</a>
+      <a href="#sec-6" class="toc-btn">6. 常见问题排查</a>
+    </nav>
+    <section id="sec-1" class="module-card">
+      <div class="module-header"><span class="module-badge">01</span><h2 class="module-title">系统初始化与卡密激活</h2></div>
+      <p style="color: #94a3b8; margin-bottom: 14px;">首次打开管理后台时，系统将默认处于 <span class="mark-circle mark-red">安全隔离锁屏状态</span>，所有编辑功能全面封锁，以保护数据完整性。</p>
+      <ul class="content-list">
+        <li><span class="txt-bold">输入卡密验证</span>：在输入框中粘贴您所获得的授权卡密（格式严格为：<span class="mark-circle">YJ-天数-时间戳-签名</span>），点击右侧 <span class="mark-circle">🔑 立即验证激活</span> 按钮。</li>
+        <li><span class="txt-bold">解封与状态侦测</span>：卡密验证通过后，全屏锁屏遮罩将自动隐去。顶栏状态仪表盘将实时呈现当前授权的 <span class="mark-circle">⏳ 到期时间</span> 以及 <span class="mark-circle mark-cyan">💾 云端已用容量</span>。</li>
+        <li><span class="txt-bold">未激活/到期咨询</span>：若卡密未配置或已超过使用周期，可直接点击 <span class="mark-circle">💬 微信咨询获取</span>，扫描页面即时弹出的管理员微信二维码咨询获取或续订。</li>
+      </ul>
+      <div class="alert-box alert-gold"><strong>💡 提示</strong>：卡密存储在本地浏览器缓存中，正常使用期间无需反复输入。若更换设备或清理浏览器缓存，重新输入有效卡密即可立刻恢复权限。</div>
+    </section>
+    <section id="sec-2" class="module-card">
+      <div class="module-header"><span class="module-badge">02</span><h2 class="module-title">网页编辑与极速发布流程</h2></div>
+      <p style="color: #94a3b8; margin-bottom: 14px;">左侧面板为主控工作区，提供多维参数配置、源码直接导入与极速一键构建能力。</p>
+      <ul class="content-list">
+        <li><span class="txt-bold">源码录入方式</span>：
+          <ul class="sub-list">
+            <li><span class="txt-bold">直接粘贴</span>：将完整的 HTML 网页代码粘贴至中心黑色代码编辑区域。</li>
+            <li><span class="txt-bold">本地导入</span>：点击上方 <span class="mark-circle">📁 导入文件</span> 按钮，支持快速导入本地 <code>.html</code> 或 <code>.htm</code> 格式代码。</li>
+            <li><span class="txt-bold">重置画布</span>：点击 <span class="mark-circle">🗑️ 清空</span> 可一键重置当前编辑器的临时内容。</li>
+          </ul>
+        </li>
+        <li><span class="txt-bold">个性化配置参数</span>：
+          <ul class="sub-list">
+            <li><span class="txt-bold">页面标题</span>：指定该单页的外显名称。<strong>若留空</strong>，系统会在您输入代码时自动抓取 <code>&lt;title&gt;</code> 标签内的文本。</li>
+            <li><span class="txt-bold">短链后缀 (Slug)</span>：设定唯一的专属访问后缀（如输入 <span class="mark-circle mark-cyan">love</span>，完整外链即为 <code>https://域名/p/love</code>）。仅限英文字母、数字及连字符；若留空则由系统随机生成 5 位短码。</li>
+            <li><span class="txt-bold">访问密码 (可选)</span>：若设置密码，外部访客必须正确输入该凭据方可解锁浏览；留空则直接向全网公开开放。</li>
+          </ul>
+        </li>
+        <li><span class="txt-bold">极速发布与链接生成</span>：确认代码与参数后，点击底部的 <span class="mark-circle">🚀 立即发布并生成链接</span>。系统将在 1-2 秒内完成云端构建与持久化挂载，并在屏幕上弹出直达链接弹窗。</li>
+      </ul>
+    </section>
+    <section id="sec-3" class="module-card">
+      <div class="module-header"><span class="module-badge">03</span><h2 class="module-title">双端沙盒实时调试</h2></div>
+      <p style="color: #94a3b8; margin-bottom: 14px;">右侧面板配备与主站安全隔离的沙盒实时渲染器，无需发布即可提前预览交互逻辑与响应式排版。</p>
+      <ul class="content-list">
+        <li><span class="txt-bold">实时防抖渲染</span>：代码编辑框录入或变更时，引擎将在 <span class="mark-circle">400毫秒</span> 内自动进行沙盒重绘，所见即所得。</li>
+        <li><span class="txt-bold">💻 电脑模式 (PC View)</span>：切换至全宽模式，自适应拉伸视口，适用于宽屏界面、后台控制面板及桌面级网页排版调试。</li>
+        <li><span class="txt-bold">📱 手机模式 (Mobile View)</span>：视口收缩为标准的 <span class="mark-circle mark-cyan">375 × 600</span> 像素移动端真机屏幕比例，并辅以真机边框，专用于测试 H5 场景、移动相册及触控动效。</li>
+        <li><span class="txt-bold">🔄 刷新视图</span>：针对依赖复杂计时器（如倒计时、计时器）或首次进入触发 CSS 动效的网页，可点击该按钮无损重载当前沙盒状态。</li>
+      </ul>
+    </section>
+    <section id="sec-4" class="module-card">
+      <div class="module-header"><span class="module-badge">04</span><h2 class="module-title">印记托管仓（资产管理）</h2></div>
+      <p style="color: #94a3b8; margin-bottom: 14px;">底部面板实时列出所有已上线的单页资产。支持查看页面私密状态、文件大小、发布日期及执行快速维护：</p>
+      <div class="table-responsive">
+        <table class="custom-table">
+          <thead><tr><th width="20%">功能按钮</th><th width="30%">触发效果</th><th width="50%">使用说明与注意事项</th></tr></thead>
+          <tbody>
+            <tr><td><span class="mark-circle">🔗 提取</span></td><td>复制公网直链</td><td>将该单页的绝对链接一键写入剪贴板，便于分发到微信、朋友圈或移动设备中。</td></tr>
+            <tr><td><span class="mark-circle mark-cyan">✏️ 修改</span></td><td>回填云端源码</td><td>从云端逆向读取最新源码并回填至左侧编辑器，修改完毕后点击「立即发布」即可直接覆写原页面。</td></tr>
+            <tr><td><span class="mark-circle">👁️ 访问</span></td><td>新标签页打开</td><td>跳出编辑环境，以纯访客视角在浏览器新窗口中检验线上实际访问效果。</td></tr>
+            <tr><td><span class="mark-circle mark-red">🗑️ 摧毁</span></td><td>下线并彻底删除</td><td>彻底解除该单页的托管并将对应文件从云端物理抹除，<strong>同时立即释放其占用的存储容量</strong>（操作不可逆）。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section id="sec-5" class="module-card">
+      <div class="module-header"><span class="module-badge">05</span><h2 class="module-title">配额、时效与安全保护机制</h2></div>
+      <p style="color: #94a3b8; margin-bottom: 14px;">系统具备完备的资源配额与到期全局防护逻辑，确保云端资源稳健受控。</p>
+      <ul class="content-list">
+        <li><span class="txt-bold">21MB 存储上限阈值</span>：每个站点统一享有 <span class="mark-circle mark-cyan">最高 21MB</span> 的云端持久化存储空间。每次发布新单页时，系统底层将严密校验已存页面总和与新网页大小。若超出 21MB，发布将被拦截并红字提示，需删除冗余网页释放空间。</li>
+        <li><span class="txt-bold">全局到期双向封锁机制</span>：卡密过期后，不仅<strong>管理后台将重新弹起遮罩全面锁定</strong>，所有对外分发的链接（如 <code>/p/xxx</code>）也将同步进入 <span class="mark-circle mark-red">⏳ 专属时空已封存</span> 保护界面，杜绝未授权超时使用。</li>
+        <li><span class="txt-bold">数据完整性与续期解封</span>：封存保护期间，您已上传并发布的<strong>网页源码与配置不会被删除</strong>。一旦获取最新有效卡密并重新验证，全站所有对外网页将在数秒内解除封禁，恢复正常访问。</li>
+      </ul>
+      <div class="alert-box alert-red"><strong>⚠️ 警告</strong>：系统严格通过服务端校验时间戳，试图通过修改本地电脑或手机的时间无法绕过到期封锁。</div>
+    </section>
+    <section id="sec-6" class="module-card">
+      <div class="module-header"><span class="module-badge">06</span><h2 class="module-title">常见问题排查 (FAQ)</h2></div>
+      <div class="faq-container">
+        <div class="faq-card">
+          <div class="faq-q"><span>❓</span> 为什么部分网页在手机端打开时，背景音乐没有自动播放？</div>
+          <div class="faq-a">此现象受苹果 iOS Safari 及微信内置浏览器的隐私策略约束。现代移动端浏览器通常禁止在无交互前提下自动发声。只需在屏幕任意位置轻点一下，即可激活音频流。</div>
+        </div>
+        <div class="faq-card">
+          <div class="faq-q"><span>❓</span> 如何将我发布的私密网页像 App 软件一样直接放到手机桌面上？</div>
+          <div class="faq-a">使用手机自带浏览器（苹果使用 Safari，安卓使用系统自带浏览器）访问该网页，点击底部的「分享」或「菜单」按钮，在弹出面板中选择 <span class="mark-circle">「添加到主屏幕」</span> 即可。</div>
+        </div>
+        <div class="faq-card">
+          <div class="faq-q"><span>❓</span> 在后台点击「立即发布」覆盖更新后，为什么用手机访问还是旧版本？</div>
+          <div class="faq-a">为保证极致加载性能，系统为发布后的网页配置了高并发静态缓存。请在浏览器中执行下拉强制刷新，或在网页设置中清除此站点的本地缓存后重新加载。</div>
+        </div>
+        <div class="faq-card">
+          <div class="faq-q"><span>❓</span> 卡密弄丢了或忘记了，可以在哪里找回？</div>
+          <div class="faq-a">卡密由卡密铸造工厂进行单向哈希生成，系统内不存明文。若卡密遗失且本地缓存被清理，请直接联系发卡客服或技术支持凭购买凭证重新获取。</div>
+        </div>
+      </div>
+    </section>
+    <footer class="footer">
+      <p>✨ 印记 (YinJi) · 私密网页高级托管引擎 · 官方正版使用指南 ✨</p>
+      <p style="margin-top: 4px; font-size: 12px; color: #475569;">All systems running on Cloudflare Edge Infrastructure</p>
+    </footer>
+  </div>
+</body>
+</html>`;
+
+    /* ==========================================================
+       🌓 1. 深浅主题切换控制逻辑
+    ========================================================== */
+    function applyTheme(theme) {
+      const btn = document.getElementById("themeToggleBtn");
+      if (theme === "light") {
+        document.body.classList.add("theme-light");
+        if (btn) {
+          btn.innerHTML = "🌙";
+          btn.title = "当前：浅太阳主题，点击切换为暗金主题";
+        }
+      } else {
+        document.body.classList.remove("theme-light");
+        if (btn) {
+          btn.innerHTML = "☀️";
+          btn.title = "当前：暗金主题，点击切换为浅太阳主题";
+        }
+      }
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
+    }
+
+    function toggleTheme() {
+      const isLight = document.body.classList.contains("theme-light");
+      const nextTheme = isLight ? "dark" : "light";
+      applyTheme(nextTheme);
+      showToast(nextTheme === "light" ? "☀️ 已切换为浅太阳主题" : "🌙 已切换为暗金深色主题");
+    }
+
+    applyTheme(localStorage.getItem(THEME_STORAGE_KEY) || "dark");
+
+    /* ==========================================================
+       🛠️ 2. 编辑器与沙盒逻辑
+    ========================================================== */
+    function autoDetectTitle(html) {
+      if (!html) return "";
+      const match = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+      return match ? match[1].trim() : "";
+    }
+
+    codeEditor.addEventListener("input", () => {
+      clearTimeout(previewTimer);
+      previewTimer = setTimeout(() => {
+        const code = codeEditor.value;
+        previewIframe.srcdoc = code.trim() ? code : "<div style='display:flex;height:100vh;align-items:center;justify-content:center;color:#94a3b8;'>等待输入源码...</div>";
+        if (!titleInput.value.trim() && autoDetectTitle(code)) titleInput.value = autoDetectTitle(code);
+      }, 400);
+      sizeTip.innerText = `当前代码：${formatBytes(new Blob([codeEditor.value]).size)}`;
+    });
+
+    function refreshPreview() { previewIframe.srcdoc = codeEditor.value; showToast("视图已刷新"); }
+    function setPreviewMode(mode) {
+      const pcBtn = document.getElementById("viewPcBtn"), mobileBtn = document.getElementById("viewMobileBtn");
+      if (mode === "mobile") { previewIframe.classList.add("mobile-mode"); mobileBtn.classList.add("btn-primary"); pcBtn.classList.remove("btn-primary"); }
+      else { previewIframe.classList.remove("mobile-mode"); pcBtn.classList.add("btn-primary"); mobileBtn.classList.remove("btn-primary"); }
+    }
+
+    function handleFileImport(e) {
+      const file = e.target.files[0]; if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        codeEditor.value = evt.target.result;
+        titleInput.value = autoDetectTitle(codeEditor.value) || file.name.replace(/\.[^/.]+$/, "");
+        slugInput.value = file.name.replace(/\.[^/.]+$/, "").toLowerCase().replace(/[^a-z0-9_-]/g, "");
+        refreshPreview();
+        sizeTip.innerText = `当前代码：${formatBytes(new Blob([codeEditor.value]).size)}`;
+        showToast("✓ 源码导入成功");
+      };
+      reader.readAsText(file);
+    }
+
+    function toggleWxModal() {
+      const wx = document.getElementById("wxModal");
+      wx.style.display = wx.style.display === "block" ? "none" : "block";
+    }
+
+    function openRenewModal() {
+      document.getElementById("renewModal").style.display = "flex";
+      document.getElementById("renewKeyInput").value = "";
+    }
+
+    function closeRenewModal(e) {
+      if (e) e.stopPropagation();
+      document.getElementById("renewModal").style.display = "none";
+    }
+
+    /* ==========================================================
+       🔒 3. 授权、续费与状态侦测
+    ========================================================== */
+    async function checkSystemStatus() {
+      try {
+        const res = await fetch("/api/system/status");
+        const data = await res.json();
+        
+        if (data.expireAt) {
+          const d = new Date(data.expireAt);
+          document.getElementById("expireDateTxt").innerText = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+        }
+        document.getElementById("storageTxt").innerText = `${formatBytes(data.usedStorage)} / 21 MB`;
+
+        if (!data.licensed) {
+          document.getElementById("lockOverlay").classList.remove("hidden");
+        } else {
+          document.getElementById("lockOverlay").classList.add("hidden");
+          loadPageList();
+        }
+      } catch (err) {
+        showToast("状态检测异常，请刷新", true);
+      }
+    }
+
+    async function activateLicense() {
+      const key = document.getElementById("licenseKeyInput").value.trim();
+      if (!key) return showToast("请输入卡密", true);
+      try {
+        const res = await fetch("/api/auth/verify", {
+          method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key })
+        });
+        const data = await res.json();
+        if (data.valid) {
+          licenseKey = key;
+          localStorage.setItem(AUTH_STORAGE_KEY, key);
+          showToast(`✨ 激活成功！已增加 ${data.addedDays} 天使用时长`);
+          checkSystemStatus();
+        } else {
+          showToast(data.error || "卡密无效或已核销", true);
+        }
+      } catch (e) { showToast("网络异常", true); }
+    }
+
+    async function submitRenewKey() {
+      const key = document.getElementById("renewKeyInput").value.trim();
+      if (!key) return showToast("请输入续费卡密", true);
+      try {
+        const res = await fetch("/api/auth/verify", {
+          method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key })
+        });
+        const data = await res.json();
+        if (data.valid) {
+          licenseKey = key;
+          localStorage.setItem(AUTH_STORAGE_KEY, key);
+          showToast(`🎉 续费成功！时长已向后叠加 ${data.addedDays} 天`);
+          closeRenewModal();
+          checkSystemStatus();
+        } else {
+          showToast(data.error || "续费失败：卡密无效或已使用", true);
+        }
+      } catch (e) { showToast("网络异常", true); }
+    }
+
+    async function publishPage() {
+      const html = codeEditor.value;
+      if (!html.trim()) return showToast("源码不能为空！", true);
+
+      publishBtn.disabled = true; publishBtn.innerHTML = "⏳ 部署中...";
+      try {
+        const payload = {
+          title: titleInput.value.trim() || autoDetectTitle(html) || slugInput.value.trim() || "未命名网页",
+          slug: slugInput.value.trim(), html, password: pwdInput.value.trim()
+        };
+        const res = await fetch("/api/page/publish", {
+          method: "POST", headers: { "Content-Type": "application/json", "x-license-key": licenseKey }, body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (res.status === 401) {
+          checkSystemStatus(); return showToast("授权已失效，请重新激活续期", true);
+        }
+        if (data.error) return showToast(data.error, true);
+
+        showToast("🚀 专属网页已成功发布上线！");
+        checkSystemStatus();
+        loadPageList();
+        setTimeout(() => { if (confirm(`发布成功！\n链接：${window.location.origin}/p/${data.slug}\n\n是否立即访问？`)) window.open(`/p/${data.slug}`, "_blank"); }, 300);
+      } catch (err) { showToast("异常：" + err.message, true); }
+      finally { publishBtn.disabled = false; publishBtn.innerHTML = "🚀 立即发布并生成链接"; }
+    }
+
+    /* ==========================================================
+       📦 4. 印记托管仓：自动部署与资产呈现
+    ========================================================== */
+    async function loadPageList() {
+      try {
+        const res = await fetch("/api/page/list", { headers: { "x-license-key": licenseKey } });
+        if (res.status === 401) return;
+        const data = await res.json();
+        let pages = data.pages || [];
+
+        const hasManual = pages.some(p => p.slug === "manual");
+        if (!hasManual && licenseKey) {
+          try {
+            const pubRes = await fetch("/api/page/publish", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", "x-license-key": licenseKey },
+              body: JSON.stringify({
+                title: "印记 · 私密网页高级托管引擎使用手册",
+                slug: "manual",
+                html: DEFAULT_MANUAL_HTML,
+                password: ""
+              })
+            });
+            const pubData = await pubRes.json();
+            if (pubData.success) {
+              pages.unshift({
+                slug: "manual",
+                title: "印记 · 私密网页高级托管引擎使用手册",
+                size: new Blob([DEFAULT_MANUAL_HTML]).size,
+                date: new Date().toISOString().split("T")[0],
+                hasPassword: false
+              });
+            }
+          } catch (_) {}
+        }
+
+        renderPageList(pages);
+      } catch (_) {}
+    }
+
+    function renderPageList(pages) {
+      const grid = document.getElementById("pageGrid");
+      document.getElementById("pageCount").innerText = pages.length;
+      grid.innerHTML = "";
+      if (pages.length === 0) return grid.innerHTML = "<div style='grid-column: 1 / -1; text-align:center; padding: 40px; color:var(--text-sub);'>印记托管仓空空如也，在上方发布您的第一个回忆吧。</div>";
+      pages.forEach(p => {
+        const card = document.createElement("div"); card.className = "page-card";
+        const pageUrl = `${window.location.origin}/p/${p.slug}`;
+        card.innerHTML = `
+          <div><div class="page-card-title">${escapeHtml(p.title)}</div><div class="page-card-slug">/p/${p.slug} ${p.hasPassword ? '🔒私密' : '🌐公开'}</div></div>
+          <div>
+            <div class="page-card-meta"><span>${formatBytes(p.size)}</span><span>${p.date}</span></div>
+            <div class="page-card-actions">
+              <button class="action-btn" onclick="copyText('${pageUrl}')">🔗 提取</button>
+              <button class="action-btn" onclick="editPageSource('${p.slug}')">✏️ 修改</button>
+              <a href="${pageUrl}" target="_blank" class="action-btn">👁️ 访问</a>
+              <button class="action-btn" style="color:#ef4444;" onclick="deletePage('${p.slug}')">🗑️ 摧毁</button>
+            </div>
+          </div>`;
+        grid.appendChild(card);
+      });
+    }
+
+    async function editPageSource(slug) {
+      if (slug === "manual") {
+        titleInput.value = "印记 · 私密网页高级托管引擎使用手册";
+        slugInput.value = "manual";
+        pwdInput.value = "";
+        codeEditor.value = DEFAULT_MANUAL_HTML;
+        refreshPreview();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        showToast("✓ 官方使用手册源码已回填，可覆写更新");
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/page/get?slug=${encodeURIComponent(slug)}`, { headers: { "x-license-key": licenseKey } });
+        if (res.ok) {
+          const data = await res.json();
+          titleInput.value = data.title; slugInput.value = data.slug; pwdInput.value = data.password; codeEditor.value = data.html;
+          refreshPreview(); window.scrollTo({ top: 0, behavior: 'smooth' }); showToast("✓ 源码已回填，可覆写更新");
+        }
+      } catch (err) {}
+    }
+
+    async function deletePage(slug) {
+      if (!confirm(`确定要彻底摧毁单页 /p/${slug} 吗？数据不可恢复！`)) return;
+      try {
+        const res = await fetch("/api/page/delete", { method: "POST", headers: { "Content-Type": "application/json", "x-license-key": licenseKey }, body: JSON.stringify({ slug }) });
+        if (res.ok) { showToast("已成功摧毁释放空间"); loadPageList(); checkSystemStatus(); }
+      } catch (_) {}
+    }
+
+    function copyText(text) { navigator.clipboard.writeText(text); showToast("✓ 链接已复制"); }
+    function clearEditor() { if (confirm("确定要清空编辑框吗？")) { titleInput.value = ""; slugInput.value = ""; pwdInput.value = ""; codeEditor.value = ""; refreshPreview(); sizeTip.innerText = "当前代码：0 B"; } }
+
+    function showToast(msg, isError = false) {
+      const toast = document.getElementById("toastMsg"); toast.innerText = msg;
+      if (isError) toast.classList.add("error"); else toast.classList.remove("error");
+      toast.classList.add("show"); setTimeout(() => toast.classList.remove("show"), 2500);
+    }
+    function escapeHtml(str) { return (str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+    function formatBytes(bytes) { if (!bytes || bytes === 0) return '0 B'; const k = 1024, sizes = ['B', 'KB', 'MB']; const i = Math.floor(Math.log(bytes) / Math.log(k)); return (bytes / Math.pow(k, i)).toFixed(1) + ' ' + sizes[i]; }
+
+    checkSystemStatus();
+  </script>
+</body>
+</html>
